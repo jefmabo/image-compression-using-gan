@@ -1,4 +1,5 @@
 import torch.nn as nn
+import torch.nn.functional as F
 
 class Generator(nn.Module):
     def __init__(self):
@@ -17,6 +18,7 @@ class Generator(nn.Module):
         )
 
     def forward(self, x):
-        compressed = self.encoder(x)
-        reconstructed = self.decoder(compressed)
-        return reconstructed
+        x = self.encoder(x)
+        x = self.decoder(x)
+        x = F.interpolate(x, size=(x.shape[2], x.shape[3]))  # Redimensiona para o tamanho correto
+        return x

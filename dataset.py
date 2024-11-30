@@ -5,7 +5,7 @@ import shutil
 
 def download(kaggle_dataset = 'jessicali9530/celeba-dataset', clear_dataset = True):    
     api = KaggleApi()
-    download_path = "datasets"
+    download_path = "dataset/all_images"
 
     if not os.path.exists(download_path):
         os.makedirs(download_path)
@@ -51,7 +51,7 @@ def move_images_to_root_folder(path):
             if file.lower().endswith(('.jpg', '.jpeg', '.png', '.gif', '.bmp', '.tiff')):
                 shutil.move(file_path, os.path.join(path, file))
             else:
-                print(f"{file} is not a image.")
+                print(f"{file} is not a image. Removing ...")
                 os.remove(file_path)
     
     for subdir, dirs, files in os.walk(path):                
@@ -59,6 +59,10 @@ def move_images_to_root_folder(path):
             shutil.rmtree(os.path.join(path, dir))
 
 def get_all_files_path():
-    base_path = "datasets"
-    file_paths = [os.path.join(base_path, file) for file in os.listdir(base_path) if os.path.isfile(os.path.join(base_path, file))]
+    file_paths = []
+    try:
+        base_path = "dataset/all_images"
+        file_paths = [os.path.join(base_path, file) for file in os.listdir(base_path) if os.path.isfile(os.path.join(base_path, file))]
+    except:
+        print(f"Path '{base_path}' is empty ...")
     return file_paths
